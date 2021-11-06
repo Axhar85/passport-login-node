@@ -8,7 +8,7 @@ app.set('view-engine', 'ejs');
 app.use(express.urlencoded({extended:false}))
 
 app.get('/', (req, res) => {
-    res.render('index.ejs', {name:'Aldo'})
+    res.render('index.ejs', {name:''})
 });
 
 app.get('/login', (req, res) => {
@@ -36,7 +36,7 @@ app.post('/register', async (req, res) => {
     } catch {
         res.redirect('/register')
     }
-    req.body.email
+    console.log(users)
 });
 
 app.listen(3000);
