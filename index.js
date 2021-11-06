@@ -1,5 +1,6 @@
 const express = require('express');
 const app = express();
+const bcrypt = require('bcrypt');
 
 const users = [];
 
@@ -21,8 +22,21 @@ app.get('/register', (req, res) => {
     res.render('register.ejs')
 });
 
-app.post('/register', (req, res) => {
+app.post('/register', async (req, res) => {
+    try{
+        const hashedPassword = await bcrypt.hash(req.body.password, 10)
+        users.push({
+            id: Date.now().toString(),
+            name: req.body.name,
+            email: req.body.email,
+            password: hashedPassword
+        })
+        req.redirect('/login')
 
+    } catch {
+        res.redirect('/register')
+    }
+    req.body.email
 });
 
 app.listen(3000);
