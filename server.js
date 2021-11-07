@@ -8,7 +8,7 @@ app.set('view-engine', 'ejs');
 app.use(express.urlencoded({extended:false}))
 
 app.get('/', (req, res) => {
-    res.render('index.ejs', {name:''})
+    res.render('index.ejs', {name: ''})
 });
 
 app.get('/login', (req, res) => {
