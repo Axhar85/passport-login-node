@@ -35,7 +35,7 @@ app.get('/', checkAuthenticated, (req, res) => {
     res.render('index.ejs', {name: req.user.name})
 });
 
-app.get('/login', (req, res) => {
+app.get('/login', checkNotAuthenticated, (req, res) => {
     res.render('login.ejs')
 });
 app.post('/login', checkNotAuthenticated, passport.authenticate('local', {
@@ -44,7 +44,7 @@ app.post('/login', checkNotAuthenticated, passport.authenticate('local', {
     failureFlash: true
   }))
 
-app.get('/register', (req, res) => {
+app.get('/register', checkNotAuthenticated, async (req, res) => {
     res.render('register.ejs')
 });
 
@@ -65,12 +65,25 @@ app.post('/register', async (req, res) => {
     
 });
 
+app.delete('/logout', (req, res) => {
+    req.logOut()
+    res.redirect('/login')
+  })
+  
+
 function checkAuthenticated(req, res, next) {
     if (req.isAuthenticated()) {
       return next()
     }
   
     res.redirect('/login')
+  }
+
+  function checkNotAuthenticated(req, res, next) {
+    if (req.isAuthenticated()) {
+      return res.redirect('/')
+    }
+    next()
   }
 
 app.listen(3000);
