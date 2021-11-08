@@ -27,6 +27,8 @@ app.use(session({
     resave: false,
     saveUninitialized:false
 }))
+app.use(passport.initialize())
+app.use(passport.session)
 
 app.get('/', (req, res) => {
     res.render('index.ejs', {name: ''})
@@ -35,9 +37,11 @@ app.get('/', (req, res) => {
 app.get('/login', (req, res) => {
     res.render('login.ejs')
 });
-app.post('/login', (req, res) => {
-
-})
+app.post('/login', checkNotAuthenticated, passport.authenticate('local', {
+    successRedirect: '/',
+    failureRedirect: '/login',
+    failureFlash: true
+  }))
 
 app.get('/register', (req, res) => {
     res.render('register.ejs')
